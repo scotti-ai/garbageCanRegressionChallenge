@@ -11,35 +11,6 @@ execute:
 
 **Choose R or Python and delete the other code chunk.**
 
-## R Code
-
-```{r}
-#| echo: true
-library(tidyverse)
-library(broom)
-
-# Data with known true relationships: Anxiety = Stress + 0.1 × Time
-observDF <- tribble(
-  ~Stress, ~StressSurvey, ~Time, ~Anxiety,
-  0,0,0,0,
-  0,0,1,0.1,
-  0,0,1,0.1,
-  1,3,1,1.1,
-  1,3,1,1.1,
-  1,3,1,1.1,
-  2,6,2,2.2,
-  2,6,2,2.2,
-  2,6,2,2.2,
-  8,9,2,8.2,
-  8,9,2,8.2,
-  8,9,2.1,8.21,
-  12,12,2.2,12.22,
-  12,12,2.2,12.22,
-  12,12,2.2,12.22
-)
-
-observDF
-```
 
 ## Python Code
 
@@ -68,3 +39,564 @@ print(observDF)
 ## Your Analysis
 
 Follow the challenge instructions from your course to complete your analysis.
+
+1. Bivariate Regression Analysis with StressSurvey: Run a bivariate regression of Anxiety on StressSurvey. What are the estimated coefficients? How do they compare to the true relationships?
+
+```{python}
+#| echo: true
+# Bivariate regression of Anxiety on StressSurvey
+X_stress_survey = observDF[['StressSurvey']]
+y_anxiety = observDF['Anxiety']
+
+# Using sklearn for regression
+lr_stress_survey = LinearRegression()
+lr_stress_survey.fit(X_stress_survey, y_anxiety)
+
+# Get coefficients
+intercept = lr_stress_survey.intercept_
+slope = lr_stress_survey.coef_[0]
+
+print("Bivariate Regression: Anxiety ~ StressSurvey")
+print(f"Intercept (β₀): {intercept:.4f}")
+print(f"Slope (β₁): {slope:.4f}")
+print(f"Regression equation: Anxiety = {intercept:.4f} + {slope:.4f} × StressSurvey")
+
+# Calculate R-squared
+y_pred = lr_stress_survey.predict(X_stress_survey)
+r2 = r2_score(y_anxiety, y_pred)
+print(f"R-squared: {r2:.4f}")
+
+# Using statsmodels for detailed statistics
+X_with_const = sm.add_constant(X_stress_survey)
+model = sm.OLS(y_anxiety, X_with_const).fit()
+print("\nDetailed regression results:")
+print(model.summary())
+
+# Compare to true relationship
+print(f"\nTrue relationship: Anxiety = Stress + 0.1 × Time")
+print(f"Estimated relationship: Anxiety = {intercept:.4f} + {slope:.4f} × StressSurvey")
+
+# Analysis of results
+print(f"\nAnalysis:")
+print(f"The true relationship shows that Anxiety depends on both Stress and Time.")
+print(f"When I look at the data, I can see that StressSurvey seems to be just Stress multiplied by 3.")
+print(f"So StressSurvey = 3 × Stress, which means Stress = StressSurvey / 3.")
+print(f"Since the true relationship is Anxiety = Stress + 0.1 × Time,")
+print(f"and StressSurvey is basically 3 times Stress, I would expect the slope")
+print(f"to be around 1/3 ≈ 0.33 if we're just looking at the Stress component.")
+print(f"But our estimated slope is {slope:.4f}, which is much higher.")
+print(f"This suggests that StressSurvey might be capturing more than just Stress,")
+print(f"possibly including some of the Time effect as well, since Time and Stress")
+print(f"seem to be correlated in this dataset.")
+```
+
+
+
+2. Visualization of Bivariate Relationship: Create a scatter plot with the regression
+line showing the relationship between StressSurvey and Anxiety. Comment on the fit
+and any potential issues.
+
+```{python}
+#| echo: true
+# Create scatter plot with regression line for StressSurvey vs Anxiety
+plt.figure(figsize=(10, 6))
+plt.scatter(observDF['StressSurvey'], observDF['Anxiety'], alpha=0.7, s=60, color='blue', label='Data points')
+
+# Create regression line
+stress_survey_range = np.linspace(observDF['StressSurvey'].min(), observDF['StressSurvey'].max(), 100)
+anxiety_pred = lr_stress_survey.predict(stress_survey_range.reshape(-1, 1))
+plt.plot(stress_survey_range, anxiety_pred, 'r-', linewidth=2, label=f'Regression line: Anxiety = {intercept:.3f} + {slope:.3f} × StressSurvey')
+
+plt.xlabel('StressSurvey')
+plt.ylabel('Anxiety')
+plt.title('Relationship between StressSurvey and Anxiety')
+plt.legend()
+plt.grid(True, alpha=0.3)
+plt.show()
+
+# Calculate residuals for analysis
+residuals = y_anxiety - y_pred
+
+print("Analysis of the scatter plot:")
+print(f"The scatter plot shows a very strong linear relationship between StressSurvey and Anxiety.")
+print(f"The R-squared of {r2:.4f} means that about {r2*100:.1f}% of the variation in Anxiety is explained by StressSurvey.")
+print(f"The data points cluster very close to the regression line, which suggests a good fit.")
+print(f"However, I notice that most of the data points fall into distinct clusters rather than being spread out.")
+print(f"This clustering pattern might indicate that the relationship isn't as smooth as the regression suggests.")
+print(f"The residuals range from {residuals.min():.3f} to {residuals.max():.3f}, which seems pretty small.")
+print(f"One potential issue I see is that the data seems to have only a few distinct StressSurvey values,")
+print(f"which might make the linear relationship look stronger than it actually is in reality.")
+```
+
+
+
+3. Bivariate Regression Analysis with Time: Run a bivariate regression of Anxi-
+ety on Time. What are the estimated coeﬀicients? How do they compare to the true
+relationship?
+
+```{python}
+#| echo: true
+# Bivariate regression of Anxiety on Time
+X_time = observDF[['Time']]
+y_anxiety = observDF['Anxiety']
+
+# Using sklearn for regression
+lr_time = LinearRegression()
+lr_time.fit(X_time, y_anxiety)
+
+# Get coefficients
+intercept_time = lr_time.intercept_
+slope_time = lr_time.coef_[0]
+
+print("Bivariate Regression: Anxiety ~ Time")
+print(f"Intercept (β₀): {intercept_time:.4f}")
+print(f"Slope (β₁): {slope_time:.4f}")
+print(f"Regression equation: Anxiety = {intercept_time:.4f} + {slope_time:.4f} × Time")
+
+# Calculate R-squared
+y_pred_time = lr_time.predict(X_time)
+r2_time = r2_score(y_anxiety, y_pred_time)
+print(f"R-squared: {r2_time:.4f}")
+
+# Using statsmodels for detailed statistics
+X_time_with_const = sm.add_constant(X_time)
+model_time = sm.OLS(y_anxiety, X_time_with_const).fit()
+print("\nDetailed regression results:")
+print(model_time.summary())
+
+# Compare to true relationship
+print(f"\nTrue relationship: Anxiety = Stress + 0.1 × Time")
+print(f"Estimated relationship: Anxiety = {intercept_time:.4f} + {slope_time:.4f} × Time")
+
+# Analysis of results
+print(f"\nAnalysis:")
+print(f"The true relationship shows that Anxiety = Stress + 0.1 × Time, so the coefficient on Time should be 0.1.")
+print(f"Our estimated coefficient is {slope_time:.4f}, which is {'very close' if abs(slope_time - 0.1) < 0.01 else 'quite different from'} the true value of 0.1.")
+print(f"The R-squared is {r2_time:.4f}, which means Time explains {'a lot' if r2_time > 0.7 else 'some' if r2_time > 0.3 else 'very little'} of the variation in Anxiety.")
+print(f"This makes sense because Time is only one part of the true relationship - we're missing the Stress component.")
+print(f"The intercept is {intercept_time:.4f}, which represents the expected Anxiety when Time = 0.")
+print(f"In the true model, when Time = 0, Anxiety = Stress, so this intercept is capturing the average Stress level.")
+```
+
+
+
+4. Visualization of Bivariate Relationship: Create a scatter plot with the regression
+line showing the relationship between Time and Anxiety. Comment on the fit and any
+potential issues.
+
+```{python}
+#| echo: true
+# Create scatter plot with regression line for Time vs Anxiety
+plt.figure(figsize=(10, 6))
+plt.scatter(observDF['Time'], observDF['Anxiety'], alpha=0.7, s=60, color='green', label='Data points')
+
+# Create regression line
+time_range = np.linspace(observDF['Time'].min(), observDF['Time'].max(), 100)
+anxiety_pred_time_range = lr_time.predict(time_range.reshape(-1, 1))
+plt.plot(time_range, anxiety_pred_time_range, 'r-', linewidth=2, label=f'Regression line: Anxiety = {intercept_time:.3f} + {slope_time:.3f} × Time')
+
+plt.xlabel('Time')
+plt.ylabel('Anxiety')
+plt.title('Relationship between Time and Anxiety')
+plt.legend()
+plt.grid(True, alpha=0.3)
+plt.show()
+
+# Calculate residuals for analysis
+residuals_time = y_anxiety - y_pred_time
+
+print("Analysis of the Time vs Anxiety scatter plot:")
+print(f"This scatter plot shows a {'strong' if r2_time > 0.7 else 'moderate' if r2_time > 0.3 else 'weak'} relationship between Time and Anxiety.")
+print(f"The R-squared of {r2_time:.4f} means that about {r2_time*100:.1f}% of the variation in Anxiety is explained by Time alone.")
+print(f"Looking at the data points, I can see they're more spread out compared to the StressSurvey plot.")
+print(f"The residuals range from {residuals_time.min():.3f} to {residuals_time.max():.3f}.")
+print(f"One thing I notice is that the data points seem to form different clusters or groups.")
+print(f"This clustering suggests that Time alone doesn't capture the full story of what affects Anxiety.")
+print(f"The fact that R-squared is {'high' if r2_time > 0.7 else 'low'} makes sense because in the true relationship,")
+print(f"Anxiety depends on both Stress AND Time, so looking at just Time misses the Stress component.")
+print(f"This is a good example of why we might need multiple regression to get the full picture.")
+```
+
+
+
+5. Multiple Regression Analysis: Run a multiple regression of Anxiety on both Stress-
+Survey and Time. What are the estimated coeﬀicients? How do they compare to the
+true relationship?
+
+```{python}
+#| echo: true
+# Multiple regression of Anxiety on StressSurvey and Time
+X_multiple_stress_survey = observDF[['StressSurvey', 'Time']]
+y_anxiety = observDF['Anxiety']
+
+# Using sklearn for regression
+lr_multiple_stress_survey = LinearRegression()
+lr_multiple_stress_survey.fit(X_multiple_stress_survey, y_anxiety)
+
+# Get coefficients
+intercept_mult_stress_survey = lr_multiple_stress_survey.intercept_
+slope_stress_survey_mult = lr_multiple_stress_survey.coef_[0]
+slope_time_mult = lr_multiple_stress_survey.coef_[1]
+
+print("Multiple Regression: Anxiety ~ StressSurvey + Time")
+print(f"Intercept (β₀): {intercept_mult_stress_survey:.4f}")
+print(f"StressSurvey coefficient (β₁): {slope_stress_survey_mult:.4f}")
+print(f"Time coefficient (β₂): {slope_time_mult:.4f}")
+print(f"Regression equation: Anxiety = {intercept_mult_stress_survey:.4f} + {slope_stress_survey_mult:.4f} × StressSurvey + {slope_time_mult:.4f} × Time")
+
+# Calculate R-squared
+y_pred_mult_stress_survey = lr_multiple_stress_survey.predict(X_multiple_stress_survey)
+r2_mult_stress_survey = r2_score(y_anxiety, y_pred_mult_stress_survey)
+print(f"R-squared: {r2_mult_stress_survey:.4f}")
+
+# Using statsmodels for detailed statistics
+X_mult_stress_survey_with_const = sm.add_constant(X_multiple_stress_survey)
+model_mult_stress_survey = sm.OLS(y_anxiety, X_mult_stress_survey_with_const).fit()
+print("\nDetailed regression results:")
+print(model_mult_stress_survey.summary())
+
+# Compare to true relationship
+print(f"\nTrue relationship: Anxiety = Stress + 0.1 × Time")
+print(f"Estimated relationship: Anxiety = {intercept_mult_stress_survey:.4f} + {slope_stress_survey_mult:.4f} × StressSurvey + {slope_time_mult:.4f} × Time")
+
+# Analysis of results
+print(f"\nAnalysis:")
+print(f"In the true relationship, Anxiety = Stress + 0.1 × Time.")
+print(f"Since StressSurvey = 3 × Stress, we would expect the coefficient on StressSurvey to be about 1/3 ≈ 0.33.")
+print(f"Our estimated StressSurvey coefficient is {slope_stress_survey_mult:.4f}, which is {'close to' if abs(slope_stress_survey_mult - 1/3) < 0.1 else 'different from'} the expected 0.33.")
+print(f"The Time coefficient should be 0.1 in the true relationship.")
+print(f"Our estimated Time coefficient is {slope_time_mult:.4f}, which is {'very close to' if abs(slope_time_mult - 0.1) < 0.01 else 'different from'} the true value of 0.1.")
+print(f"The R-squared of {r2_mult_stress_survey:.4f} is {'much higher' if r2_mult_stress_survey > 0.95 else 'higher' if r2_mult_stress_survey > 0.9 else 'similar to'} the individual regressions.")
+print(f"This suggests that including both variables gives us a much better understanding of what affects Anxiety.")
+```
+
+
+
+6. Multiple Regression Analysis: Run a multiple regression of Anxiety on both Stress
+and Time. What are the estimated coeﬀicients? How do they compare to the true
+relationship?
+
+```{python}
+#| echo: true
+# Multiple regression of Anxiety on Stress and Time
+X_multiple_stress = observDF[['Stress', 'Time']]
+y_anxiety = observDF['Anxiety']
+
+# Using sklearn for regression
+lr_multiple_stress = LinearRegression()
+lr_multiple_stress.fit(X_multiple_stress, y_anxiety)
+
+# Get coefficients
+intercept_mult_stress = lr_multiple_stress.intercept_
+slope_stress_mult = lr_multiple_stress.coef_[0]
+slope_time_mult_stress = lr_multiple_stress.coef_[1]
+
+print("Multiple Regression: Anxiety ~ Stress + Time")
+print(f"Intercept (β₀): {intercept_mult_stress:.4f}")
+print(f"Stress coefficient (β₁): {slope_stress_mult:.4f}")
+print(f"Time coefficient (β₂): {slope_time_mult_stress:.4f}")
+print(f"Regression equation: Anxiety = {intercept_mult_stress:.4f} + {slope_stress_mult:.4f} × Stress + {slope_time_mult_stress:.4f} × Time")
+
+# Calculate R-squared
+y_pred_mult_stress = lr_multiple_stress.predict(X_multiple_stress)
+r2_mult_stress = r2_score(y_anxiety, y_pred_mult_stress)
+print(f"R-squared: {r2_mult_stress:.4f}")
+
+# Using statsmodels for detailed statistics
+X_mult_stress_with_const = sm.add_constant(X_multiple_stress)
+model_mult_stress = sm.OLS(y_anxiety, X_mult_stress_with_const).fit()
+print("\nDetailed regression results:")
+print(model_mult_stress.summary())
+
+# Compare to true relationship
+print(f"\nTrue relationship: Anxiety = Stress + 0.1 × Time")
+print(f"Estimated relationship: Anxiety = {intercept_mult_stress:.4f} + {slope_stress_mult:.4f} × Stress + {slope_time_mult_stress:.4f} × Time")
+
+# Analysis of results
+print(f"\nAnalysis:")
+print(f"This is the most interesting regression because it uses the actual Stress variable from the true relationship!")
+print(f"The true relationship is Anxiety = Stress + 0.1 × Time, so we should get coefficients of 1.0 for Stress and 0.1 for Time.")
+print(f"Our estimated Stress coefficient is {slope_stress_mult:.4f}, which is {'exactly' if abs(slope_stress_mult - 1.0) < 0.001 else 'very close to' if abs(slope_stress_mult - 1.0) < 0.01 else 'different from'} the true value of 1.0.")
+print(f"Our estimated Time coefficient is {slope_time_mult_stress:.4f}, which is {'exactly' if abs(slope_time_mult_stress - 0.1) < 0.001 else 'very close to' if abs(slope_time_mult_stress - 0.1) < 0.01 else 'different from'} the true value of 0.1.")
+print(f"The R-squared of {r2_mult_stress:.4f} is {'perfect' if r2_mult_stress > 0.999 else 'very high' if r2_mult_stress > 0.95 else 'high'}.")
+print(f"The intercept is {intercept_mult_stress:.4f}, which should be close to 0 in the true relationship.")
+print(f"This regression should give us the most accurate picture of what's really happening!")
+```
+
+
+
+7. Model Comparison: Compare the R-squared values and coeﬀicient interpretations
+between the two multiple regression models. Do both models show statistical signifi-
+cance in all of their coeﬀicient estimates? What does this tell you about the real-world
+implications of multiple regression results?
+
+```{python}
+#| echo: true
+# Model comparison analysis
+print("=== MODEL COMPARISON ANALYSIS ===")
+print()
+
+print("Model 1: Anxiety ~ StressSurvey + Time")
+print(f"  R-squared: {r2_mult_stress_survey:.4f}")
+print(f"  StressSurvey coefficient: {slope_stress_survey_mult:.4f}")
+print(f"  Time coefficient: {slope_time_mult:.4f}")
+print()
+
+print("Model 2: Anxiety ~ Stress + Time")
+print(f"  R-squared: {r2_mult_stress:.4f}")
+print(f"  Stress coefficient: {slope_stress_mult:.4f}")
+print(f"  Time coefficient: {slope_time_mult_stress:.4f}")
+print()
+
+# Statistical significance check (using p-values from statsmodels)
+print("STATISTICAL SIGNIFICANCE ANALYSIS:")
+print()
+
+print("Model 1 (StressSurvey + Time):")
+print(f"  StressSurvey p-value: {model_mult_stress_survey.pvalues['StressSurvey']:.4f} ({'significant' if model_mult_stress_survey.pvalues['StressSurvey'] < 0.05 else 'not significant'})")
+print(f"  Time p-value: {model_mult_stress_survey.pvalues['Time']:.4f} ({'significant' if model_mult_stress_survey.pvalues['Time'] < 0.05 else 'not significant'})")
+print()
+
+print("Model 2 (Stress + Time):")
+print(f"  Stress p-value: {model_mult_stress.pvalues['Stress']:.4f} ({'significant' if model_mult_stress.pvalues['Stress'] < 0.05 else 'not significant'})")
+print(f"  Time p-value: {model_mult_stress.pvalues['Time']:.4f} ({'significant' if model_mult_stress.pvalues['Time'] < 0.05 else 'not significant'})")
+print()
+
+print("=== INTERPRETATION AND REAL-WORLD IMPLICATIONS ===")
+print()
+
+print("R-squared Comparison:")
+if r2_mult_stress > r2_mult_stress_survey:
+    print(f"Model 2 (Stress + Time) has a higher R-squared ({r2_mult_stress:.4f}) than Model 1 ({r2_mult_stress_survey:.4f}).")
+    print("This makes sense because Model 2 uses the actual Stress variable from the true relationship.")
+else:
+    print(f"Model 1 (StressSurvey + Time) has a higher R-squared ({r2_mult_stress_survey:.4f}) than Model 2 ({r2_mult_stress:.4f}).")
+    print("This is surprising since Model 2 should be more accurate.")
+
+print()
+print("Statistical Significance:")
+print("Both models show statistical significance for all coefficients (p < 0.05),")
+print("but this doesn't mean both models are equally valid!")
+
+print()
+print("Real-World Implications:")
+print("This is a perfect example of why we need to be careful with regression results:")
+print("1. Both models are statistically significant, but only one reflects the true relationship.")
+print("2. In real research, we might not know which variables are the 'true' ones.")
+print("3. This shows how easy it is to find statistically significant relationships")
+print("   that don't actually represent causal effects.")
+print("4. The choice of variables can completely change the interpretation of results.")
+print("5. This is why we need theory and domain knowledge, not just statistical significance.")
+```
+
+
+
+8. Reflect on Real-World Implications: For each of the two multiple regression models,
+assume their respective outputs/conclusions were published in academic journals and
+then subsequently picked up by the popular press. What headline about time spent on
+social media and its effect on anxiety would you expect to see from a popular press outlet
+covering the first model? And what headline would you expect to see from a popular
+press outlet covering the second model? Assuming confirmation bias is real, which model
+is a typical parent going to believe? Which model will Facebook, Instagram, and TikTok
+executives prefer?
+
+```{python}
+#| echo: true
+# Real-world implications analysis
+print("=== MEDIA HEADLINES AND REAL-WORLD IMPLICATIONS ===")
+print()
+
+print("MODEL 1: Anxiety ~ StressSurvey + Time")
+print(f"Key finding: Time coefficient = {slope_time_mult:.4f}")
+print()
+
+if slope_time_mult > 0.05:  # If Time has a substantial positive effect
+    headline1 = "STUDY SHOWS: Time Spent on Social Media Directly Increases Anxiety Levels"
+    interpretation1 = "Time has a significant positive effect on anxiety"
+elif slope_time_mult > 0:
+    headline1 = "New Research Links Social Media Time to Higher Anxiety, But Effect is Small"
+    interpretation1 = "Time has a small but significant positive effect on anxiety"
+else:
+    headline1 = "Study Finds No Direct Link Between Social Media Time and Anxiety"
+    interpretation1 = "Time has no significant effect on anxiety"
+
+print(f"EXPECTED MEDIA HEADLINE: '{headline1}'")
+print(f"Interpretation: {interpretation1}")
+print()
+
+print("MODEL 2: Anxiety ~ Stress + Time")
+print(f"Key finding: Time coefficient = {slope_time_mult_stress:.4f}")
+print()
+
+if slope_time_mult_stress > 0.05:  # If Time has a substantial positive effect
+    headline2 = "BREAKING: Social Media Time Proven to Cause Anxiety in New Study"
+    interpretation2 = "Time has a significant positive effect on anxiety"
+elif slope_time_mult_stress > 0:
+    headline2 = "Research Confirms Social Media Time Increases Anxiety Levels"
+    interpretation2 = "Time has a small but significant positive effect on anxiety"
+else:
+    headline2 = "Study Finds Social Media Time Has Minimal Impact on Anxiety"
+    interpretation2 = "Time has no significant effect on anxiety"
+
+print(f"EXPECTED MEDIA HEADLINE: '{headline2}'")
+print(f"Interpretation: {interpretation2}")
+print()
+
+print("=== CONFIRMATION BIAS AND STAKEHOLDER PERSPECTIVES ===")
+print()
+
+print("Which model would a typical parent believe?")
+print("Parents would likely believe the model that shows Time has a LARGER effect on anxiety,")
+print("because this confirms their existing concerns about social media's impact on their children.")
+if abs(slope_time_mult) > abs(slope_time_mult_stress):
+    print("Model 1 would be more convincing to parents because it shows a larger Time effect.")
+    parent_preference = "Model 1"
+else:
+    print("Model 2 would be more convincing to parents because it shows a larger Time effect.")
+    parent_preference = "Model 2"
+
+print()
+print("Which model would Facebook, Instagram, and TikTok executives prefer?")
+print("Social media executives would prefer the model that shows Time has a SMALLER effect on anxiety,")
+print("because this minimizes concerns about their platforms causing harm.")
+if abs(slope_time_mult) < abs(slope_time_mult_stress):
+    print("Model 1 would be preferred by executives because it shows a smaller Time effect.")
+    exec_preference = "Model 1"
+else:
+    print("Model 2 would be preferred by executives because it shows a smaller Time effect.")
+    exec_preference = "Model 2"
+
+print()
+print("CONFIRMATION BIAS IN ACTION:")
+print("This demonstrates how the same data can be interpreted differently based on:")
+print("1. Which variables are included in the model")
+print("2. The existing beliefs and biases of different audiences")
+print("3. How statistical results get simplified for public consumption")
+print("4. The importance of understanding the underlying methodology")
+print()
+print("The scary part: Both models are statistically significant and 'scientifically valid',")
+print("but they lead to completely different policy recommendations and public understanding!")
+```
+
+
+
+9. Avoiding Misleading Statistical Significance: Reflect on this tip to avoid being
+misled by statistically significant results: splitting the sample into meaningful subsets
+("statistical regimes"), and using graphical diagnostics for linearity rather than blind
+reliance on "canned" regressions. Apply this approach to multiple regression of Anxiety
+on both StressSurvey and Time by analyzing a smartly chosen subset of the data. What
+specific subset did you choose and why? Did you get results that are both statistically
+significant and close to the true relationship?
+
+```{python}
+#| echo: true
+# Subset analysis to avoid misleading statistical significance
+print("=== SUBSET ANALYSIS TO AVOID MISLEADING STATISTICAL SIGNIFICANCE ===")
+print()
+
+# First, let's examine the data structure to choose a meaningful subset
+print("EXAMINING THE DATA STRUCTURE:")
+print("Let's look at the unique values in each variable:")
+print(f"Unique Stress values: {sorted(observDF['Stress'].unique())}")
+print(f"Unique StressSurvey values: {sorted(observDF['StressSurvey'].unique())}")
+print(f"Unique Time values: {sorted(observDF['Time'].unique())}")
+print()
+
+# Let's create a meaningful subset based on stress levels
+# I'll choose the subset where Stress >= 2 (moderate to high stress)
+# This makes sense because it represents a distinct "stress regime"
+print("CHOOSING A MEANINGFUL SUBSET:")
+print("I'm choosing observations where Stress >= 2 (moderate to high stress levels).")
+print("This creates a 'high stress regime' subset that should show different patterns.")
+print()
+
+subset_mask = observDF['Stress'] >= 2
+subset_data = observDF[subset_mask]
+
+print(f"Original sample size: {len(observDF)}")
+print(f"Subset sample size: {len(subset_data)}")
+print(f"Subset data:")
+print(subset_data)
+print()
+
+# Run multiple regression on the subset
+X_subset = subset_data[['StressSurvey', 'Time']]
+y_subset = subset_data['Anxiety']
+
+lr_subset = LinearRegression()
+lr_subset.fit(X_subset, y_subset)
+
+# Get coefficients for subset
+intercept_subset = lr_subset.intercept_
+slope_stress_survey_subset = lr_subset.coef_[0]
+slope_time_subset = lr_subset.coef_[1]
+
+print("SUBSET REGRESSION RESULTS:")
+print(f"Subset Regression: Anxiety ~ StressSurvey + Time (Stress >= 2)")
+print(f"Intercept (β₀): {intercept_subset:.4f}")
+print(f"StressSurvey coefficient (β₁): {slope_stress_survey_subset:.4f}")
+print(f"Time coefficient (β₂): {slope_time_subset:.4f}")
+print(f"Regression equation: Anxiety = {intercept_subset:.4f} + {slope_stress_survey_subset:.4f} × StressSurvey + {slope_time_subset:.4f} × Time")
+
+# Calculate R-squared for subset
+y_pred_subset = lr_subset.predict(X_subset)
+r2_subset = r2_score(y_subset, y_pred_subset)
+print(f"R-squared: {r2_subset:.4f}")
+
+# Using statsmodels for detailed statistics on subset
+X_subset_with_const = sm.add_constant(X_subset)
+model_subset = sm.OLS(y_subset, X_subset_with_const).fit()
+print("\nDetailed subset regression results:")
+print(model_subset.summary())
+
+print()
+print("=== COMPARISON WITH FULL SAMPLE ===")
+print()
+
+print("Full Sample (Anxiety ~ StressSurvey + Time):")
+print(f"  StressSurvey coefficient: {slope_stress_survey_mult:.4f}")
+print(f"  Time coefficient: {slope_time_mult:.4f}")
+print(f"  R-squared: {r2_mult_stress_survey:.4f}")
+print()
+
+print("Subset Sample (Stress >= 2):")
+print(f"  StressSurvey coefficient: {slope_stress_survey_subset:.4f}")
+print(f"  Time coefficient: {slope_time_subset:.4f}")
+print(f"  R-squared: {r2_subset:.4f}")
+print()
+
+print("=== ANALYSIS OF RESULTS ===")
+print()
+
+print("Why I chose this subset:")
+print("1. Stress >= 2 represents a distinct 'high stress regime'")
+print("2. This subset removes the low-stress observations that might be driving spurious relationships")
+print("3. It tests whether the relationship holds in a more homogeneous group")
+print()
+
+print("Comparison with true relationship:")
+print("True relationship: Anxiety = Stress + 0.1 × Time")
+print(f"Expected StressSurvey coefficient in subset: ~0.33 (since StressSurvey = 3 × Stress)")
+print(f"Actual StressSurvey coefficient in subset: {slope_stress_survey_subset:.4f}")
+print(f"Expected Time coefficient: 0.1")
+print(f"Actual Time coefficient in subset: {slope_time_subset:.4f}")
+print()
+
+print("Did I get results close to the true relationship?")
+stress_survey_close = abs(slope_stress_survey_subset - 1/3) < 0.1
+time_close = abs(slope_time_subset - 0.1) < 0.05
+
+print(f"StressSurvey coefficient is {'close to' if stress_survey_close else 'different from'} expected (0.33)")
+print(f"Time coefficient is {'close to' if time_close else 'different from'} expected (0.1)")
+print()
+
+print("Statistical significance in subset:")
+print(f"StressSurvey p-value: {model_subset.pvalues['StressSurvey']:.4f} ({'significant' if model_subset.pvalues['StressSurvey'] < 0.05 else 'not significant'})")
+print(f"Time p-value: {model_subset.pvalues['Time']:.4f} ({'significant' if model_subset.pvalues['Time'] < 0.05 else 'not significant'})")
+print()
+
+print("CONCLUSIONS:")
+print("This subset analysis helps us understand whether the relationships we found")
+print("are robust across different 'statistical regimes' or just artifacts of the full sample.")
+print("It's a good way to test the validity of our regression results!")
+```
