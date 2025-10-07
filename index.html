@@ -104,7 +104,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><strong>Choose R or Python and delete the other code chunk.</strong></p>
 <section id="python-code" class="level2">
 <h2 class="anchored" data-anchor-id="python-code">Python Code</h2>
-<div id="4f23d7db" class="cell" data-execution_count="1">
+<div id="8e76d343" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
@@ -149,7 +149,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ol type="1">
 <li>Bivariate Regression Analysis with StressSurvey: Run a bivariate regression of Anxiety on StressSurvey. What are the estimated coefficients? How do they compare to the true relationships?</li>
 </ol>
-<div id="961df742" class="cell" data-execution_count="2">
+<div id="0e13e21a" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Bivariate regression of Anxiety on StressSurvey</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>X_stress_survey <span class="op">=</span> observDF[[<span class="st">'StressSurvey'</span>]]</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>y_anxiety <span class="op">=</span> observDF[<span class="st">'Anxiety'</span>]</span>
@@ -207,8 +207,8 @@ Detailed regression results:
 Dep. Variable:                Anxiety   R-squared:                       0.901
 Model:                            OLS   Adj. R-squared:                  0.893
 Method:                 Least Squares   F-statistic:                     118.4
-Date:                Thu, 02 Oct 2025   Prob (F-statistic):           6.68e-08
-Time:                        17:03:30   Log-Likelihood:                -27.079
+Date:                Tue, 07 Oct 2025   Prob (F-statistic):           6.68e-08
+Time:                        15:55:52   Log-Likelihood:                -27.079
 No. Observations:                  15   AIC:                             58.16
 Df Residuals:                      13   BIC:                             59.57
 Df Model:                           1                                         
@@ -247,7 +247,7 @@ seem to be correlated in this dataset.</code></pre>
 <ol start="2" type="1">
 <li>Visualization of Bivariate Relationship: Create a scatter plot with the regression line showing the relationship between StressSurvey and Anxiety. Comment on the fit and any potential issues.</li>
 </ol>
-<div id="7ae7f51b" class="cell" data-execution_count="3">
+<div id="2d2ed9bc" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create scatter plot with regression line for StressSurvey vs Anxiety</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">6</span>))</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>plt.scatter(observDF[<span class="st">'StressSurvey'</span>], observDF[<span class="st">'Anxiety'</span>], alpha<span class="op">=</span><span class="fl">0.7</span>, s<span class="op">=</span><span class="dv">60</span>, color<span class="op">=</span><span class="st">'blue'</span>, label<span class="op">=</span><span class="st">'Data points'</span>)</span>
@@ -302,7 +302,7 @@ which might make the linear relationship look stronger than it actually is in re
 <ol start="3" type="1">
 <li>Bivariate Regression Analysis with Time: Run a bivariate regression of Anxi- ety on Time. What are the estimated coeﬀicients? How do they compare to the true relationship?</li>
 </ol>
-<div id="12a14836" class="cell" data-execution_count="4">
+<div id="96374c94" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Bivariate regression of Anxiety on Time</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>X_time <span class="op">=</span> observDF[[<span class="st">'Time'</span>]]</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>y_anxiety <span class="op">=</span> observDF[<span class="st">'Anxiety'</span>]</span>
@@ -356,8 +356,8 @@ Detailed regression results:
 Dep. Variable:                Anxiety   R-squared:                       0.563
 Model:                            OLS   Adj. R-squared:                  0.529
 Method:                 Least Squares   F-statistic:                     16.75
-Date:                Thu, 02 Oct 2025   Prob (F-statistic):            0.00127
-Time:                        17:03:37   Log-Likelihood:                -38.223
+Date:                Tue, 07 Oct 2025   Prob (F-statistic):            0.00127
+Time:                        15:55:52   Log-Likelihood:                -38.223
 No. Observations:                  15   AIC:                             80.45
 Df Residuals:                      13   BIC:                             81.86
 Df Model:                           1                                         
@@ -392,7 +392,7 @@ In the true model, when Time = 0, Anxiety = Stress, so this intercept is capturi
 <ol start="4" type="1">
 <li>Visualization of Bivariate Relationship: Create a scatter plot with the regression line showing the relationship between Time and Anxiety. Comment on the fit and any potential issues.</li>
 </ol>
-<div id="3b937fa6" class="cell" data-execution_count="5">
+<div id="74017d6a" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create scatter plot with regression line for Time vs Anxiety</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">6</span>))</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>plt.scatter(observDF[<span class="st">'Time'</span>], observDF[<span class="st">'Anxiety'</span>], alpha<span class="op">=</span><span class="fl">0.7</span>, s<span class="op">=</span><span class="dv">60</span>, color<span class="op">=</span><span class="st">'green'</span>, label<span class="op">=</span><span class="st">'Data points'</span>)</span>
@@ -449,7 +449,7 @@ This is a good example of why we might need multiple regression to get the full 
 <ol start="5" type="1">
 <li>Multiple Regression Analysis: Run a multiple regression of Anxiety on both Stress- Survey and Time. What are the estimated coeﬀicients? How do they compare to the true relationship?</li>
 </ol>
-<div id="8af6457d" class="cell" data-execution_count="6">
+<div id="7973df4c" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Multiple regression of Anxiety on StressSurvey and Time</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>X_multiple_stress_survey <span class="op">=</span> observDF[[<span class="st">'StressSurvey'</span>, <span class="st">'Time'</span>]]</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>y_anxiety <span class="op">=</span> observDF[<span class="st">'Anxiety'</span>]</span>
@@ -507,8 +507,8 @@ Detailed regression results:
 Dep. Variable:                Anxiety   R-squared:                       0.935
 Model:                            OLS   Adj. R-squared:                  0.924
 Method:                 Least Squares   F-statistic:                     86.32
-Date:                Thu, 02 Oct 2025   Prob (F-statistic):           7.54e-08
-Time:                        17:03:41   Log-Likelihood:                -23.931
+Date:                Tue, 07 Oct 2025   Prob (F-statistic):           7.54e-08
+Time:                        15:55:52   Log-Likelihood:                -23.931
 No. Observations:                  15   AIC:                             53.86
 Df Residuals:                      12   BIC:                             55.99
 Df Model:                           2                                         
@@ -545,7 +545,7 @@ This suggests that including both variables gives us a much better understanding
 <ol start="6" type="1">
 <li>Multiple Regression Analysis: Run a multiple regression of Anxiety on both Stress and Time. What are the estimated coeﬀicients? How do they compare to the true relationship?</li>
 </ol>
-<div id="a9aae29d" class="cell" data-execution_count="7">
+<div id="56cf7637" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Multiple regression of Anxiety on Stress and Time</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>X_multiple_stress <span class="op">=</span> observDF[[<span class="st">'Stress'</span>, <span class="st">'Time'</span>]]</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>y_anxiety <span class="op">=</span> observDF[<span class="st">'Anxiety'</span>]</span>
@@ -603,8 +603,8 @@ Detailed regression results:
 Dep. Variable:                Anxiety   R-squared:                       1.000
 Model:                            OLS   Adj. R-squared:                  1.000
 Method:                 Least Squares   F-statistic:                 1.511e+31
-Date:                Thu, 02 Oct 2025   Prob (F-statistic):          3.92e-183
-Time:                        17:03:41   Log-Likelihood:                 480.58
+Date:                Tue, 07 Oct 2025   Prob (F-statistic):          3.92e-183
+Time:                        15:55:52   Log-Likelihood:                 480.58
 No. Observations:                  15   AIC:                            -955.2
 Df Residuals:                      12   BIC:                            -953.0
 Df Model:                           2                                         
@@ -641,7 +641,7 @@ This regression should give us the most accurate picture of what's really happen
 <ol start="7" type="1">
 <li>Model Comparison: Compare the R-squared values and coeﬀicient interpretations between the two multiple regression models. Do both models show statistical signifi- cance in all of their coeﬀicient estimates? What does this tell you about the real-world implications of multiple regression results?</li>
 </ol>
-<div id="589a81e2" class="cell" data-execution_count="8">
+<div id="c62f9649" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Model comparison analysis</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"=== MODEL COMPARISON ANALYSIS ==="</span>)</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>()</span>
@@ -743,7 +743,7 @@ This is a perfect example of why we need to be careful with regression results:
 <ol start="8" type="1">
 <li>Reflect on Real-World Implications: For each of the two multiple regression models, assume their respective outputs/conclusions were published in academic journals and then subsequently picked up by the popular press. What headline about time spent on social media and its effect on anxiety would you expect to see from a popular press outlet covering the first model? And what headline would you expect to see from a popular press outlet covering the second model? Assuming confirmation bias is real, which model is a typical parent going to believe? Which model will Facebook, Instagram, and TikTok executives prefer?</li>
 </ol>
-<div id="1fa40024" class="cell" data-execution_count="9">
+<div id="03fd52e9" class="cell" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Real-world implications analysis</span></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"=== MEDIA HEADLINES AND REAL-WORLD IMPLICATIONS ==="</span>)</span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>()</span>
@@ -859,7 +859,7 @@ but they lead to completely different policy recommendations and public understa
 <ol start="9" type="1">
 <li>Avoiding Misleading Statistical Significance: Reflect on this tip to avoid being misled by statistically significant results: splitting the sample into meaningful subsets (“statistical regimes”), and using graphical diagnostics for linearity rather than blind reliance on “canned” regressions. Apply this approach to multiple regression of Anxiety on both StressSurvey and Time by analyzing a smartly chosen subset of the data. What specific subset did you choose and why? Did you get results that are both statistically significant and close to the true relationship?</li>
 </ol>
-<div id="eb27e909" class="cell" data-execution_count="10">
+<div id="131f0169" class="cell" data-execution_count="10">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Subset analysis to avoid misleading statistical significance</span></span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"=== SUBSET ANALYSIS TO AVOID MISLEADING STATISTICAL SIGNIFICANCE ==="</span>)</span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>()</span>
@@ -1010,8 +1010,8 @@ Detailed subset regression results:
 Dep. Variable:                Anxiety   R-squared:                       0.994
 Model:                            OLS   Adj. R-squared:                  0.993
 Method:                 Least Squares   F-statistic:                     531.0
-Date:                Thu, 02 Oct 2025   Prob (F-statistic):           1.77e-07
-Time:                        17:03:41   Log-Likelihood:                -2.1893
+Date:                Tue, 07 Oct 2025   Prob (F-statistic):           1.77e-07
+Time:                        15:55:52   Log-Likelihood:                -2.1893
 No. Observations:                   9   AIC:                             10.38
 Df Residuals:                       6   BIC:                             10.97
 Df Model:                           2                                         
